@@ -47,7 +47,7 @@ class RoleDistribution:
         "Gremlin": 1.0,
         "Hunter": 1.0,
         "Insomniac": 1.0,
-        "Mason": 1.0,
+        "Mason": 2.0,
         "Minion": 1.0,
         "Mystic Wolf": 1.0,
         "Paranormal Investigator": 1.0,
@@ -59,7 +59,7 @@ class RoleDistribution:
         "Tanner": 1.0,
         "Troublemaker": 1.0,
         "Villager": 0.0, # excludes Villagers
-        "Werewolf": 1.0,
+        "Werewolf": 2.0,
         "Witch": 1.0,
     }
 
@@ -80,11 +80,6 @@ class RoleDistribution:
         for _, weight in self.roleWeights.items():
             total += weight            
         return int(total)
-    
-    def normalizeWeights(self) -> None:
-        total = self.totalWeight()
-        for role, weight in self.roleWeights.items():
-            self.roleWeights[role] = weight / total
 
     def numRoleRemaining(self, role: str) -> int:
         return self.remainingRoles[role]
