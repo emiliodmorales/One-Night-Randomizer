@@ -2,16 +2,13 @@ import random
 import distribution
 
 def main():
-    # does not include villagers
     dist = distribution.RoleDistribution()
     numPlayers = int(input("How many players? "))
     numRoles = numPlayers + 3
     chosenRoles = []
-    i = 0
     while len(chosenRoles) < numRoles:
         # pick a random role
         selectedRole = dist.getRandomRole()
-        # input(f"{len(chosenRoles) + 1}/{numRoles} Selected role: {selectedRole} ")
         # If it is Mason:
         #   There must be two open slots
         #   It adds both Masons
@@ -44,6 +41,7 @@ def main():
         #       It also adds the Seer
         elif selectedRole == "Beholder":
             if chosenRoles.count("Seer") == 1:
+                dist.takeRole(selectedRole)
                 chosenRoles.append(selectedRole)
             elif len(chosenRoles) + 2 <= numRoles:
                 dist.takeRole(selectedRole)

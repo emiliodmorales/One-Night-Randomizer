@@ -67,14 +67,10 @@ class RoleDistribution:
         pass
 
     def getRandomRole(self) -> str:
-        # self.normalizeWeights()
         r = math.floor(random.random() * self.totalWeight())
-        # print(r)
         cumulativeSum = 0
         for role, weight in self.roleWeights.items():
             cumulativeSum += weight
-            # print(cumulativeSum)
-            # print(role, weight)
             if r <= cumulativeSum:
                 return role
         return "N/A"
