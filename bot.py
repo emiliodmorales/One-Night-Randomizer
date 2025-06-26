@@ -29,11 +29,18 @@ async def on_ready():
 @client.tree.command(name="randomize", description="random role list")
 async def randomize(interaction: discord.Interaction, players: int):
     print(f'Making a role list for {players} players')
+    
+    if players < 1:
+        await interaction.response.send_message("Number of players must be positive!")
+        return
 
     loop = asyncio.get_running_loop()
     roles = await loop.run_in_executor(None, randomRoles, players) 
 
-    await interaction.response.send_message(f'{roles}')
+    if roles.startswith("Not enough players") or roles.startswith("Too many players"):
+        await interaction.response.send_message(roles)
+    else:
+        await interaction.response.send_message(f'```\n{roles}```')
     print(roles)
 
 @client.command()

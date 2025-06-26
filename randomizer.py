@@ -77,8 +77,14 @@ def randomize(numPlayers):
     if numPlayers > 16:
         return "Too many players"
     
-    dist = distribution.RoleDistribution(ROLE_WEIGHTS, CARD_LIST)
+    # Create a fresh copy of the card list for each randomization
+    card_list_copy = CARD_LIST.copy()
+    dist = distribution.RoleDistribution(ROLE_WEIGHTS, card_list_copy)
     chosenRoles = dist.randomize(numPlayers)
+    
+    if not chosenRoles:  # Handle case where randomization failed
+        return "Failed to generate roles - please try again"
+    
     output = ""
     for i, role in enumerate(chosenRoles):
         output += f"{i + 1}. {role}\n"
