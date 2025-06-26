@@ -9,7 +9,7 @@ load_dotenv()
 
 OWNER_USERID_ENV = os.getenv('OWNER_USERID')
 if OWNER_USERID_ENV is None:
-    raise ValueError("OWNER_USERID_ENV environment variable not set")
+    raise ValueError("OWNER_USERID environment variable not set")
 OWNER_USERID: int = int(OWNER_USERID_ENV)
 
 DISCORD_TOKEN_ENV = os.getenv('DISCORD_TOKEN')
