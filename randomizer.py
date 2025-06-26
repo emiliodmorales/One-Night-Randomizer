@@ -1,43 +1,42 @@
-import random
 import sys
 import distribution
 
-# role weight chart
-#   Always      : 999.0
-#   Often       : 1.5
-#   Standard    : 1.0
-#   Rare        : 0.6
-#   Barely      : 0.3
-#   Never       : 0.0
+# add features
+#  only add apprentice tanner after adding tanner
+#  only add apprentice seer after adding seer
+#  only add aura seer after adding seer
+#  only add beholder after adding seer
+#  only add minion OR squire after adding werewolf
+
 
 ROLE_WEIGHTS = {
     "Alpha Wolf": 0.9,
     "Apprentice Seer": 1.0,
-    "Apprentice Tanner": 0.5,
-    "Aura Seer": 1.0,
-    "Beholder": 1.0,
-    "Bodyguard": 0.1,
+    "Apprentice Tanner": 0.2,
+    "Aura Seer": 0.9,
+    "Beholder": 0.7,
+    "Bodyguard": 0.0000001,
     "Copycat": 1.0,
-    "Cursed": 0.1,
-    "Doppelganger": 1.0,
-    "Dream Wolf": 0.5,
+    "Cursed": 0.0000001,
+    "Doppelgänger": 1.0,
+    "Dream Wolf": 0.2,
     "Drunk": 1.0,
-    "Gremlin": 0.5,
-    "Hunter": 1.0,
+    "Gremlin": 0.0,
+    "Hunter": 1.5,
     "Insomniac": 1.0,
     "Mason": 1.0, # automatically adds both masons
     "Minion": 0.8,
-    "Mystic Wolf": 0.8,
+    "Mystic Wolf": 0.9,
     "Paranormal Investigator": 1.0,
     "Prince": 1.0,
     "Revealer": 1.0,
     "Robber": 1.5,
     "Seer": 1.5,
-    "Squire": 0.8,
-    "Tanner": 0.6,
-    "Troublemaker": 0.3,
+    "Squire": 0.4,
+    "Tanner": 0.4,
+    "Troublemaker": 0.0,
     "Villager": 0.0, # excludes Villagers
-    "Werewolf": 2.0, # accounts for two separate werewolves
+    "Werewolf": 1.4, # accounts for two separate werewolves
     "Witch": 1.0,
 }
 
@@ -50,7 +49,7 @@ CARD_LIST = {
     "Bodyguard": 1,
     "Copycat": 1,
     "Cursed": 1,
-    "Doppelganger": 1,
+    "Doppelgänger": 1,
     "Dream Wolf": 1,
     "Drunk": 1,
     "Gremlin": 1,
@@ -72,17 +71,25 @@ CARD_LIST = {
     "Witch": 1,
 }
 
+def randomize(numPlayers):
+    if numPlayers < 3:
+        return "Not enough players"
+    if numPlayers > 16:
+        return "Too many players"
+    
+    dist = distribution.RoleDistribution(ROLE_WEIGHTS, CARD_LIST)
+    chosenRoles = dist.randomize(numPlayers)
+    output = ""
+    for i, role in enumerate(chosenRoles):
+        output += f"{i + 1}. {role}\n"
+    return output
+
 def main():
     if len(sys.argv) == 2:
         numPlayers = int(sys.argv[1])
     else:
         numPlayers = int(input("How many players? "))
-
-    dist = distribution.RoleDistribution(ROLE_WEIGHTS, CARD_LIST)
-    chosenRoles = dist.randomize(numPlayers)
-    for i, role in enumerate(chosenRoles):
-        print(f"{i + 1}. {role}", end="\n")
-    
+    print(randomize(numPlayers))
 
 if __name__ == "__main__":
     main()
