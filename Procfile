@@ -1,1 +1,1 @@
-web: python bot.py runserver %PORT%
+web: python bot.py
