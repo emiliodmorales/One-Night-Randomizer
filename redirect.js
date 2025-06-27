@@ -1,16 +1,17 @@
-// Open the ONU Werewolf game in the default browser when run with Node.js
-const url = "https://netgames.io/games/onu-werewolf/new";
-const { exec } = require("child_process");
+// Open the redirect.html page in the default browser when run with Node.js
+const path = require('path');
+const { exec } = require('child_process');
+const filePath = path.join(__dirname, 'redirect.html');
 
 let command;
 switch (process.platform) {
-  case "win32":
-    command = `start "" "${url}"`;
+  case 'win32':
+    command = `start "" "${filePath}"`;
     break;
-  case "darwin":
-    command = `open "${url}"`;
+  case 'darwin':
+    command = `open "${filePath}"`;
     break;
   default:
-    command = `xdg-open "${url}"`;
+    command = `xdg-open "${filePath}"`;
 }
 exec(command);
