@@ -45,6 +45,34 @@ class RoleDistribution:
             if not self.roleAvailable(selectedRole):
                 # print(f"{selectedRole} was not available")
                 continue
+            # Only add Apprentice Tanner after adding Tanner
+            if selectedRole == "Apprentice Tanner" and chosenRoles.count("Tanner") == 0:
+                continue
+            # Only add Apprentice Seer after adding Seer
+            if selectedRole == "Apprentice Seer" and chosenRoles.count("Seer") == 0:
+                continue
+            # Only add Aura Seer after adding Seer
+            if selectedRole == "Aura Seer" and chosenRoles.count("Seer") == 0:
+                continue
+            # Only add Beholder after adding Seer
+            if selectedRole == "Beholder":
+                if chosenRoles.count("Seer") == 1:
+                    self.takeRole(selectedRole)
+                    chosenRoles.append(selectedRole)
+                    continue
+                elif len(chosenRoles) + 2 <= numRoles:
+                    self.takeRole(selectedRole)
+                    chosenRoles.append(selectedRole)
+
+                    self.takeRole("Seer")
+                    chosenRoles.append("Seer")
+                    continue
+                else:
+                    continue
+            # Only add Minion OR Squire after adding Werewolf
+            if selectedRole in ("Minion", "Squire") and chosenRoles.count("Werewolf") == 0:
+                continue
+            # Mason logic
             if selectedRole == "Mason":
                 if len(chosenRoles) + 2 <= numRoles:
                     self.takeRole(selectedRole)
@@ -52,10 +80,9 @@ class RoleDistribution:
 
                     self.takeRole(selectedRole)
                     chosenRoles.append(selectedRole)
-            # If it is Alpha Wolf:
-            #   There must be a Werewolf left
-            #   It also adds a Werewolf
-            elif selectedRole == "Alpha Wolf":
+                continue
+            # Alpha Wolf logic
+            if selectedRole == "Alpha Wolf":
                 if self.roleAvailable("Werewolf"):
                     numRoles += 1
 
@@ -64,25 +91,10 @@ class RoleDistribution:
 
                     self.takeRole("Werewolf")
                     chosenRoles.append("Werewolf")
-            # If it is Beholder:
-            #   There must be a Seer
-            #   If there is not a Seer:
-            #       There must be two open slots
-            #       It also adds the Seer
-            elif selectedRole == "Beholder":
-                if chosenRoles.count("Seer") == 1:
-                    self.takeRole(selectedRole)
-                    chosenRoles.append(selectedRole)
-                elif len(chosenRoles) + 2 <= numRoles:
-                    self.takeRole(selectedRole)
-                    chosenRoles.append(selectedRole)
-
-                    self.takeRole("Seer")
-                    chosenRoles.append("Seer")
+                continue
             # Otherwise it adds the selected role
-            else:
-                self.takeRole(selectedRole)
-                chosenRoles.append(selectedRole)
+            self.takeRole(selectedRole)
+            chosenRoles.append(selectedRole)
 
         return chosenRoles
 
