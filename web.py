@@ -59,7 +59,7 @@ class WebHandler(BaseHTTPRequestHandler):
             self.wfile.write(b'''<h1>ONU Werewolf Verification</h1><p>If you are seeing this page, the verification URL is working! You may now use this URL in your Discord server's role Links settings as a requirement for role verification.</p>''')
         elif self.path == "/api/interactions":
             self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
+            self.send_header('Content-Type', 'text/plain')
             self.end_headers()
             self.wfile.write(b'OK')
         else:
