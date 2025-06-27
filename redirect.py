@@ -1,6 +1,17 @@
-import webbrowser
 import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# Get the absolute path to redirect.html in the current directory
-file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'redirect.html'))
-webbrowser.open(f'file://{file_path}')
+REDIRECT_URL = "https://netgames.io/games/onu-werewolf/new"
+PORT = int(os.environ.get("PORT", 8080))
+
+class RedirectHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(302)
+        self.send_header('Location', REDIRECT_URL)
+        self.end_headers()
+
+if __name__ == "__main__":
+    server_address = ('', PORT)
+    httpd = HTTPServer(server_address, RedirectHandler)
+    print(f"Serving redirect on port {PORT} -> {REDIRECT_URL}")
+    httpd.serve_forever()
