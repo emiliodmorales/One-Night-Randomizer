@@ -1,75 +1,14 @@
 import sys
 import distribution
+import json
+import os
 
-# add features
-#  only add apprentice tanner after adding tanner
-#  only add apprentice seer after adding seer
-#  only add aura seer after adding seer
-#  only add beholder after adding seer
-#  only add minion OR squire after adding werewolf
-
-
-ROLE_WEIGHTS = {
-    "Alpha Wolf": 0.9,
-    "Apprentice Seer": 1.0,
-    "Apprentice Tanner": 0.2,
-    "Aura Seer": 0.9,
-    "Beholder": 0.7,
-    "Bodyguard": 0.0000001,
-    "Copycat": 1.0,
-    "Cursed": 0.0000001,
-    "Doppelgänger": 1.0,
-    "Dream Wolf": 0.2,
-    "Drunk": 1.0,
-    "Gremlin": 0.0,
-    "Hunter": 1.5,
-    "Insomniac": 1.0,
-    "Mason": 1.0, # automatically adds both masons
-    "Minion": 0.8,
-    "Mystic Wolf": 0.9,
-    "Paranormal Investigator": 1.0,
-    "Prince": 1.0,
-    "Revealer": 1.0,
-    "Robber": 1.5,
-    "Seer": 1.5,
-    "Squire": 0.4,
-    "Tanner": 0.4,
-    "Troublemaker": 0.0,
-    "Villager": 0.0, # excludes Villagers
-    "Werewolf": 1.4, # accounts for two separate werewolves
-    "Witch": 1.0,
-}
-
-CARD_LIST = {
-    "Alpha Wolf": 1,
-    "Apprentice Seer": 1,
-    "Apprentice Tanner": 1,
-    "Aura Seer": 1,
-    "Beholder": 1,
-    "Bodyguard": 1,
-    "Copycat": 1,
-    "Cursed": 1,
-    "Doppelgänger": 1,
-    "Dream Wolf": 1,
-    "Drunk": 1,
-    "Gremlin": 1,
-    "Hunter": 1,
-    "Insomniac": 1,
-    "Mason": 2,
-    "Minion": 1,
-    "Mystic Wolf": 1,
-    "Paranormal Investigator": 1,
-    "Prince": 1,
-    "Revealer": 1,
-    "Robber": 1,
-    "Seer": 1,
-    "Squire": 1,
-    "Tanner": 1,
-    "Troublemaker": 1,
-    "Villager": 3,
-    "Werewolf": 2,
-    "Witch": 1,
-}
+# Load role weights and quantities from roles.json
+ROLES_PATH = os.path.join(os.path.dirname(__file__), 'roles.json')
+with open(ROLES_PATH, 'r', encoding='utf-8') as f:
+    roles_data = json.load(f)
+ROLE_WEIGHTS = roles_data['weights']
+CARD_LIST = roles_data['quantities']
 
 def randomize(numPlayers):
     if numPlayers < 3:
