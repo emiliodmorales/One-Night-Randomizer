@@ -83,6 +83,21 @@ class WeightsGroup(app_commands.Group):
         ROLE_WEIGHTS = randomizer.ROLE_WEIGHTS.copy()
         await interaction.response.send_message("All role weights have been reset to default.")
 
+    @app_commands.command(name="save", description="Save the current weights to roles.json")
+    async def saveweight(self, interaction: discord.Interaction):
+        if interaction.user.id != OWNER_USERID:
+            await interaction.response.send_message("You must be the owner to use this command!", ephemeral=True)
+            return
+        import json
+        import os
+        ROLES_PATH = os.path.join(os.path.dirname(__file__), 'roles.json')
+        with open(ROLES_PATH, 'r', encoding='utf-8') as f:
+            roles_data = json.load(f)
+        roles_data['weights'] = ROLE_WEIGHTS
+        with open(ROLES_PATH, 'w', encoding='utf-8') as f:
+            json.dump(roles_data, f, indent=2)
+        await interaction.response.send_message("Role weights have been saved to roles.json.")
+
 # Register the group
 client.tree.add_command(WeightsGroup())
 
@@ -118,6 +133,7 @@ async def help_command(interaction: discord.Interaction):
         "/weights increase <role> <amount> - Increase the weight for a role by a given amount (owner only).\n"
         "/weights decrease <role> <amount> - Decrease the weight for a role by a given amount (owner only).\n"
         "/weights reset - Reset all role weights to default (owner only).\n"
+        "/weights save - Save the current weights to roles.json (owner only).\n"
         "\n/help - Show this help message.\n"
         "sync (owner only, text command) - Sync the command tree with Discord."
     )
