@@ -1,2 +1,2 @@
 worker: python bot.py
-web: node redirect.js
+web: python redirect.py
