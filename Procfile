@@ -1,2 +1,2 @@
 worker: python bot.py
-web: python redirect.py runserver 8080
+web: python web.py runserver 8000
