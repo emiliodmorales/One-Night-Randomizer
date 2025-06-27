@@ -124,19 +124,20 @@ async def randomize(interaction: discord.Interaction, players: int):
 
 @client.tree.command(name="help", description="show help for commands")
 async def help_command(interaction: discord.Interaction):
-    help_text = (
-        "**Available Commands:**\n"
-        "/randomize <players> - Generate a random role list for the given number of players.\n"
-        "\n**/weights subcommands:**\n"
-        "/weights show - Show the weights for each role.\n"
-        "/weights set <role> <weight> - Set the weight for a specific role (owner only).\n"
-        "/weights increase <role> <amount> - Increase the weight for a role by a given amount (owner only).\n"
-        "/weights decrease <role> <amount> - Decrease the weight for a role by a given amount (owner only).\n"
-        "/weights reset - Reset all role weights to default (owner only).\n"
-        "/weights save - Save the current weights to roles.json (owner only).\n"
-        "\n/help - Show this help message.\n"
-        "sync (owner only, text command) - Sync the command tree with Discord."
-    )
+    # Gather top-level commands
+    commands_list = [
+        f"/{cmd.name} - {cmd.description}" for cmd in client.tree.get_commands() if not isinstance(cmd, app_commands.Group)
+    ]
+    # Gather weights subcommands
+    weights_group = next((cmd for cmd in client.tree.get_commands() if cmd.name == "weights"), None)
+    weights_subs = []
+    if weights_group:
+        weights_subs = [f"/weights {sub.name} - {sub.description}" for sub in weights_group.commands]
+    help_text = "**Available Commands:**\n" + "\n".join(commands_list)
+    if weights_subs:
+        help_text += "\n\n**/weights subcommands:**\n" + "\n".join(weights_subs)
+    help_text += "\n\n/help - Show this help message.\n"
+    help_text += "sync (owner only, text command) - Sync the command tree with Discord."
     await interaction.response.send_message(help_text, ephemeral=True)
 
 @client.command()
@@ -147,5 +148,10 @@ async def sync(ctx):
         await ctx.send('Command tree synced.')
     else:
         await ctx.send('You must be the owner to use this command!')
+
+@client.tree.command(name="newgame", description="Get a link to start a new ONU Werewolf game")
+async def newgame(interaction: discord.Interaction):
+    url = "https://netgames.io/games/onu-werewolf/new"
+    await interaction.response.send_message(f"[Start a new game]({url})", ephemeral=True)
 
 client.run(DISCORD_TOKEN)
