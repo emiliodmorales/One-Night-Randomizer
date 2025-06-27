@@ -1,2 +1,2 @@
 worker: python bot.py
-web: python iframe_app.py runserver 8080
+web: python redirect.py runserver 8080
